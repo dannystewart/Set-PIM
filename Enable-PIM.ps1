@@ -74,8 +74,17 @@ Connect-MgGraph -NoWelcome
 $context = Get-MgContext
 Write-Host "✓ Connected as $($context.Account)" -ForegroundColor Green
 
-Write-Host "`nFetching user information..." -ForegroundColor Cyan
+# Get user and role info
+Write-Host "`nFetching user and role info..." -ForegroundColor Cyan
 $currentUser = (Get-MgUser -UserId $context.Account).Id
+$myRoles = Get-MgRoleManagementDirectoryRoleEligibilitySchedule -ExpandProperty RoleDefinition -All -Filter "principalId eq '$currentUser'"
+
+# Verify eligibility for Global Administrator
+$myRole = $myRoles | Where-Object { $_.RoleDefinition.DisplayName -eq "Global Administrator" }
+if (-not $myRole) {
+    Write-Host "Global Administrator not found as eligible role." -ForegroundColor Red
+    exit
+}
 
 # Setup parameters for activation
 $params = @{
