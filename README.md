@@ -1,2 +1,31 @@
 # Enable-PIM
-PowerShell script to enable PIM roles
+
+Quick and dirty PowerShell script to enable the Global Administrator role in Entra as well as the Owner role for an Azure tenant.
+
+Yes, I know this is bad practice. I may refine it for greater flexibility, but since it was tricky to figure out due to poor documentation from Microsoft, I figured I would share this basic version in case it helps somebody.
+
+## Usage
+
+This was written for PowerShell 7 and will work cross-platform (I use it on macOS). It also requires the PowerShell modules for Microsoft Graph and Azure.
+
+Be sure to edit the script with your subscription and tenant IDs:
+
+```powershell
+# Your subscription and tenant IDs
+$subscriptionId = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+$tenantId = "ffffffff-eeee-dddd-cccc-bbbbbbbbbbbb"
+```
+
+The account will be automatically determined based on what you've used authenticate to Graph.
+
+You can run the script with only a justification:
+
+```powershell
+./Enable-PIM.ps1 "Managing user account permissions"
+```
+
+This will default to a duration of 8 hours. You can also specify the time:
+
+```powershell
+./Enable-PIM.ps1 -Reason "Managing user account permissions" -Hours 2
+```
