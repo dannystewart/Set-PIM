@@ -2,7 +2,11 @@
 
 Quick and dirty PowerShell script to enable the Global Administrator role in Entra as well as the Owner role for an Azure tenant.
 
-Yes, I know this is bad practice. I may refine it for greater flexibility, but since it was tricky to figure out due to poor documentation from Microsoft, I figured I would share this basic version in case it helps somebody.
+**NOTE:** This is _**very bad practice**_, and is shared for example purposes only. You should customize it for your use case. I may refine it for greater flexibility, but since Microsoft's documentation is poor for what should be a straightforward task, I wanted to share this basic version in case it helps somebody.
+
+You may also prefer the version from [Mark Hunter Orr](https://medium.com/@markhunterorr/activate-your-microsoft-entra-pim-roles-with-powershell-62a0d611659c) available [here](https://github.com/markorr321/PIM-PAM). It's more robust, but it doesn't handle Azure RBAC roles.
+
+This script is shared under the MIT license, and is provided with no support or warranty whatsoever. Use at your own risk.
 
 ## Usage
 
