@@ -1,3 +1,50 @@
+<#
+.SYNOPSIS
+    Activates Entra Global Administrator and Azure Owner PIM roles.
+
+.DESCRIPTION
+    This script activates Privileged Identity Management (PIM) roles for both
+    Microsoft Entra ID (Global Administrator) and Azure RBAC (Owner) using
+    the Microsoft Graph and Azure PowerShell modules.
+
+    NOTE: Elevating to Global Administrator and Owner roles should be done
+    sparingly and only when necessary. This script is provided as an example
+    and should be customized for your specific environment.
+
+.PARAMETER Reason
+    A justification for why the privileged roles are being activated.
+    This is required and will be logged in the Azure audit logs.
+
+.PARAMETER Hours
+    The duration in hours for which the roles should be activated.
+    Defaults to 9 hours. Will be capped at maximum allowed values
+    (9 hours for Entra, 8 hours for Azure).
+
+.EXAMPLE
+    ./Enable-PIM.ps1 "Investigating security alert"
+    Activates both roles with the provided justification for the default duration.
+
+.EXAMPLE
+    ./Enable-PIM.ps1 -Reason "Emergency access required" -Hours 4
+    Activates both roles for 4 hours with the specified justification.
+
+.NOTES
+    File Name      : Enable-PIM.ps1
+    Author         : Danny Stewart
+    Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
+    License        : MIT License
+
+    This script requires you to be eligible for both the Global Administrator
+    role in Entra ID and the Owner role in Azure. It will use your current
+    identity for authentication.
+
+    You must edit the script to update the subscription and tenant IDs
+    before using it in your environment.
+
+.LINK
+    https://github.com/dannystewart/Enable-PIM
+#>
+
 param(
     [Parameter(Mandatory = $true)]
     [string]$Reason,
