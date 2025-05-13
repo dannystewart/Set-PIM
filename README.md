@@ -8,9 +8,13 @@ You may also prefer the version from [Mark Hunter Orr](https://medium.com/@markh
 
 This script is shared under the MIT license, and is provided with no support or warranty whatsoever. Use at your own risk.
 
-## Usage
+## Requirements
 
-This was written for PowerShell 7 and will work cross-platform (I use it on macOS). It also requires the PowerShell modules for Microsoft Graph and Azure.
+- PowerShell 7+ (the script will work cross-platform)
+- Microsoft.Graph PowerShell module (`Install-Module Microsoft.Graph`)
+- Az PowerShell module (`Install-Module Az`)
+
+## Usage
 
 Be sure to edit the script with your subscription and tenant IDs:
 
