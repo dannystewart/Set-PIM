@@ -17,8 +17,7 @@
 
 .PARAMETER Hours
     The duration in hours for which the roles should be activated.
-    Defaults to 9 hours. Will be capped at maximum allowed values
-    (9 hours for Entra, 8 hours for Azure).
+    Defaults to 8 hours. Will be capped at configurable max allowed value.
 
 .EXAMPLE
     ./Enable-PIM.ps1 "Investigating security alert"
