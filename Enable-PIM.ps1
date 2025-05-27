@@ -13,11 +13,15 @@
 
 .PARAMETER Reason
     A justification for why the privileged roles are being activated.
-    This is required and will be logged in the Azure audit logs.
+    This is required and will be prompted for if not supplied.
 
 .PARAMETER Hours
     The duration in hours for which the roles should be activated.
     Defaults to 8 hours. Will be capped at configurable max allowed value.
+
+.EXAMPLE
+    ./Enable-PIM.ps1
+    Activates both roles with the default duration, prompting for justification.
 
 .EXAMPLE
     ./Enable-PIM.ps1 "Investigating security alert"
@@ -30,6 +34,7 @@
 .NOTES
     File Name      : Enable-PIM.ps1
     Author         : Danny Stewart
+    Version        : 1.1.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
     License        : MIT License
 
@@ -45,7 +50,7 @@
 #>
 
 param(
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $false)]
     [string]$Reason,
 
     [Parameter(Mandatory = $false)]
@@ -65,7 +70,14 @@ $maxHours = 8
 $durationHours = if ($Hours -gt $maxHours) { $maxHours } else { $Hours }
 $duration = "PT${durationHours}H"
 
-Write-Host "Starting PIM role activation...`n" -ForegroundColor Cyan
+# Prompt for reason if not supplied
+if ([string]::IsNullOrWhiteSpace($Reason)) {
+    Write-Host -NoNewline "Enter reason for PIM activation: " -ForegroundColor Cyan
+    $Reason = Read-Host
+}
+
+# Begin activation process
+Write-Host "Starting PIM role activation..." -ForegroundColor Cyan
 
 # Connect to Microsoft Graph
 Write-Host "Connecting to Microsoft Graph..." -ForegroundColor Cyan
