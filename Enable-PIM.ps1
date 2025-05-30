@@ -34,7 +34,7 @@
 .NOTES
     File Name      : Enable-PIM.ps1
     Author         : Danny Stewart
-    Version        : 1.1.0
+    Version        : 1.2.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
     License        : MIT License
 
@@ -70,10 +70,28 @@ $maxHours = 8
 $durationHours = if ($Hours -gt $maxHours) { $maxHours } else { $Hours }
 $duration = "PT${durationHours}H"
 
-# Prompt for reason if not supplied
-if ([string]::IsNullOrWhiteSpace($Reason)) {
+# Prompt for hours if not supplied as an argument
+if (-not $PSBoundParameters.ContainsKey('Hours')) {
+    Write-Host -NoNewline "Enter duration in hours (hit Enter for max of $maxHours): " -ForegroundColor Cyan
+    $inputHours = Read-Host
+    if ([string]::IsNullOrWhiteSpace($inputHours)) {
+        $Hours = $maxHours
+    } elseif ($inputHours -as [int]) {
+        $Hours = [int]$inputHours
+    } else {
+        Write-Host "Invalid input. Defaulting to max hours: $maxHours" -ForegroundColor Yellow
+        $Hours = $maxHours
+    }
+}
+
+# Prompt for reason if not supplied as an argument
+if (-not $PSBoundParameters.ContainsKey('Reason')) {
     Write-Host -NoNewline "Enter reason for PIM activation: " -ForegroundColor Cyan
     $Reason = Read-Host
+    if ([string]::IsNullOrWhiteSpace($Reason)) {
+        Write-Host "Error: A reason is required to activate PIM. Exiting." -ForegroundColor Red
+        exit 1
+    }
 }
 
 # Begin activation process
