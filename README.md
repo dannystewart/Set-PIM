@@ -26,14 +26,16 @@ $tenantId = "ffffffff-eeee-dddd-cccc-bbbbbbbbbbbb"
 
 The account will be automatically determined based on what you've used authenticate to Graph.
 
-You can run the script with only a justification:
+You can run the script with no arguments, and you'll be prompted for both justification and duration:
 
 ```powershell
-./Enable-PIM.ps1 "Managing user account permissions"
+./Enable-PIM.ps1
 ```
 
-This will default to a duration of 8 hours. You can also specify the time:
+Or you can run the script and provide a justification and duration directly:
 
 ```powershell
-./Enable-PIM.ps1 -Reason "Managing user account permissions" -Hours 2
+./Enable-PIM.ps1 -Reason "Managing user account permissions" -Hours 4
 ```
+
+You'll be prompted for anything required that you haven't provided.
