@@ -30,31 +30,31 @@
     The Azure tenant ID. If not provided, will use the default value set in the script variables.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Enable
+    ./Set-PIM.ps1 -Enable
     Activates both roles with the default duration, prompting for justification.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Enable -Reason "Investigating security alert"
+    ./Set-PIM.ps1 -Enable -Reason "Investigating security alert"
     Activates both roles with the provided justification for the default duration.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Enable -Reason "Emergency access required" -Hours 4
+    ./Set-PIM.ps1 -Enable -Reason "Emergency access required" -Hours 4
     Activates both roles for 4 hours with the specified justification.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Disable
+    ./Set-PIM.ps1 -Disable
     Deactivates both roles with the default reason.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Disable -Reason "Finished administrative tasks"
+    ./Set-PIM.ps1 -Disable -Reason "Finished administrative tasks"
     Deactivates both roles with a custom reason.
 
 .EXAMPLE
-    ./Enable-PIM.ps1 -Enable -SubscriptionId "12345678-1234-1234-1234-123456789012" -TenantId "87654321-4321-4321-4321-210987654321"
+    ./Set-PIM.ps1 -Enable -SubscriptionId "12345678-1234-1234-1234-123456789012" -TenantId "87654321-4321-4321-4321-210987654321"
     Activates both roles using the specified subscription and tenant IDs.
 
 .NOTES
-    File Name      : Enable-PIM.ps1
+    File Name      : Set-PIM.ps1
     Author         : Danny Stewart
     Version        : 2.0.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
@@ -67,7 +67,7 @@
     command-line arguments when running the script.
 
 .LINK
-    https://github.com/dannystewart/Enable-PIM
+    https://github.com/dannystewart/Set-PIM
 #>
 
 param(
