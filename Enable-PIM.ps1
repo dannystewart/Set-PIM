@@ -19,6 +19,14 @@
     The duration in hours for which the roles should be activated.
     Defaults to 8 hours. Will be capped at configurable max allowed value.
 
+.PARAMETER SubscriptionId
+    The Azure subscription ID. If not provided, will use the default value
+    set in the script variables.
+
+.PARAMETER TenantId
+    The Azure tenant ID. If not provided, will use the default value
+    set in the script variables.
+
 .EXAMPLE
     ./Enable-PIM.ps1
     Activates both roles with the default duration, prompting for justification.
@@ -31,10 +39,14 @@
     ./Enable-PIM.ps1 -Reason "Emergency access required" -Hours 4
     Activates both roles for 4 hours with the specified justification.
 
+.EXAMPLE
+    ./Enable-PIM.ps1 -SubscriptionId "12345678-1234-1234-1234-123456789012" -TenantId "87654321-4321-4321-4321-210987654321"
+    Activates both roles using the specified subscription and tenant IDs.
+
 .NOTES
     File Name      : Enable-PIM.ps1
     Author         : Danny Stewart
-    Version        : 1.2.0
+    Version        : 1.3.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
     License        : MIT License
 
@@ -42,8 +54,8 @@
     role in Entra ID and the Owner role in Azure. It will use your current
     identity for authentication.
 
-    You must edit the script to update the subscription and tenant IDs
-    before using it in your environment.
+    You can either edit the script to update the subscription and tenant IDs
+    or provide them as command-line arguments when running the script.
 
 .LINK
     https://github.com/dannystewart/Enable-PIM
@@ -54,12 +66,30 @@ param(
     [string]$Reason,
 
     [Parameter(Mandatory = $false)]
-    [int]$Hours = 8
+    [int]$Hours = 8,
+
+    [Parameter(Mandatory = $false)]
+    [string]$SubscriptionId,
+
+    [Parameter(Mandatory = $false)]
+    [string]$TenantId
 )
 
-# Your subscription and tenant IDs
-$subscriptionId = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
-$tenantId = "ffffffff-eeee-dddd-cccc-bbbbbbbbbbbb"
+# Default subscription and tenant IDs (can be edited for easier repeat usage)
+$defaultSubscriptionId = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+$defaultTenantId = "ffffffff-eeee-dddd-cccc-bbbbbbbbbbbb"
+
+# Use provided parameters or fall back to default values
+$subscriptionId = if ($SubscriptionId) { $SubscriptionId } else { $defaultSubscriptionId }
+$tenantId = if ($TenantId) { $TenantId } else { $defaultTenantId }
+
+# Validate that we have valid subscription and tenant IDs
+if ($subscriptionId -eq $defaultSubscriptionId -or $tenantId -eq $defaultTenantId) {
+    Write-Host "Warning: Using default placeholder IDs. Please provide valid subscription and tenant IDs either:" -ForegroundColor Yellow
+    Write-Host "  1. As parameters: -SubscriptionId 'your-sub-id' -TenantId 'your-tenant-id'" -ForegroundColor Yellow
+    Write-Host "  2. By editing the default values in this script" -ForegroundColor Yellow
+    Write-Host ""
+}
 
 # Azure role assignment ID (this is for the Owner role)
 $roleDefinitionId = "8e3af657-a8ff-443c-a75c-2fe8c4bcb635"
@@ -76,9 +106,11 @@ if (-not $PSBoundParameters.ContainsKey('Hours')) {
     $inputHours = Read-Host
     if ([string]::IsNullOrWhiteSpace($inputHours)) {
         $Hours = $maxHours
-    } elseif ($inputHours -as [int]) {
+    }
+    elseif ($inputHours -as [int]) {
         $Hours = [int]$inputHours
-    } else {
+    }
+    else {
         Write-Host "Invalid input. Defaulting to max hours: $maxHours" -ForegroundColor Yellow
         $Hours = $maxHours
     }
