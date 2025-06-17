@@ -56,7 +56,7 @@
 .NOTES
     File Name      : Set-PIM.ps1
     Author         : Danny Stewart
-    Version        : 2.0.0
+    Version        : 2.1.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
     License        : MIT License
 
@@ -148,17 +148,6 @@ if ($Enable) {
     Write-Host "`nStarting PIM role activation..." -ForegroundColor Cyan
 }
 else {
-    if (-not $PSBoundParameters.ContainsKey('Reason')) {
-        Write-Host -NoNewline "Enter reason for PIM deactivation (or hit Enter for default): " -ForegroundColor Cyan
-        $inputReason = Read-Host
-        if ([string]::IsNullOrWhiteSpace($inputReason)) {
-            $Reason = "End of work session"
-        }
-        else {
-            $Reason = $inputReason
-        }
-    }
-
     Write-Host "`nStarting PIM role deactivation..." -ForegroundColor Cyan
 }
 
@@ -231,7 +220,6 @@ else {
             PrincipalId      = $activeGlobalAdmin.PrincipalId
             RoleDefinitionId = $activeGlobalAdmin.RoleDefinitionId
             DirectoryScopeId = $activeGlobalAdmin.DirectoryScopeId
-            Justification    = $Reason
         }
 
         # Deactivate the Entra role
@@ -304,7 +292,6 @@ else {
             -PrincipalId $currentUser `
             -RoleDefinitionId "/subscriptions/${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefinitionId}" `
             -RequestType SelfDeactivate `
-            -Justification $Reason `
             -ErrorVariable azureError `
             -ErrorAction SilentlyContinue
 
