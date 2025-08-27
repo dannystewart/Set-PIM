@@ -56,7 +56,7 @@
 .NOTES
     File Name      : Set-PIM.ps1
     Author         : Danny Stewart
-    Version        : 2.1.0
+    Version        : 2.2.0
     Prerequisite   : PowerShell 7+, Microsoft.Graph and Az PowerShell modules
     License        : MIT License
 
@@ -116,23 +116,10 @@ if ($Enable) {
     $durationHours = if ($Hours -gt $maxHours) { $maxHours } else { $Hours }
     $duration = "PT${durationHours}H"
 
-    # Prompt for hours if not supplied as an argument
+    # Set hours to maximum allowed if not supplied as an argument
     if (-not $PSBoundParameters.ContainsKey('Hours')) {
-        Write-Host -NoNewline "Enter duration in hours (hit Enter for max of $maxHours): " -ForegroundColor Cyan
-        $inputHours = Read-Host
-        if ([string]::IsNullOrWhiteSpace($inputHours)) {
-            $Hours = $maxHours
-        }
-        elseif ($inputHours -as [int]) {
-            $Hours = [int]$inputHours
-        }
-        else {
-            Write-Host "Invalid input. Defaulting to max hours: $maxHours" -ForegroundColor Yellow
-            $Hours = $maxHours
-        }
-
-        $durationHours = if ($Hours -gt $maxHours) { $maxHours } else { $Hours }
-        $duration = "PT${durationHours}H"
+        Write-Host "No hours specified; using max ($maxHours hours)." -ForegroundColor Blue
+        $Hours = $maxHours
     }
 
     # Prompt for reason if not supplied as an argument
